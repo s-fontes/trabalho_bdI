@@ -41,7 +41,7 @@ class LivroCadastroDialog(BaseForm):
             Static("Ano de Publicação:", id="lbl_ano"),
             Input(value=str(self.dados.get("ano", "")), placeholder="Ex: 2025", id="ano"),
 
-            Button("Gerenciar Autores", id="gerenciar_autores"),
+            Button("Selecionar Autores", id="selecionar_autores"),
             Horizontal(
                 Button("Cancelar", id="cancelar"),
                 Button("Salvar", id="salvar", variant="success"),
@@ -57,7 +57,7 @@ class LivroCadastroDialog(BaseForm):
     def cancelar(self):
         self.app.pop_screen()
 
-    @on(Button.Pressed, "#gerenciar_autores")
+    @on(Button.Pressed, "#selecionar_autores")
     def abrir_selecao_autores(self):
         def receber_autores(autores):
             self.autores_selecionados = {a[0] for a in autores}

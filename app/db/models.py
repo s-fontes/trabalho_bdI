@@ -104,7 +104,10 @@ class Exemplar(Base):
 
 class Emprestimo(Base):
     __tablename__ = "emprestimos"
-    __table_args__ = {"schema": "biblioteca"}
+    __table_args__ = (
+        CheckConstraint("data_prevista >= data_emprestimo", name="chk_data_prevista"),
+        {"schema": "biblioteca"}
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     usuario_id: Mapped[int] = mapped_column(ForeignKey("biblioteca.usuarios.id"), nullable=False)
@@ -117,9 +120,6 @@ class Emprestimo(Base):
     usuario = relationship("Usuario", back_populates="emprestimos")
     exemplar = relationship("Exemplar", back_populates="emprestimos")
 
-    __table_args__ = (
-        CheckConstraint("data_prevista >= data_emprestimo", name="chk_data_prevista"),
-    )
 
     def __repr__(self):
         return f"<Emprestimo(usuario={self.usuario_id}, exemplar={self.exemplar_id})>"

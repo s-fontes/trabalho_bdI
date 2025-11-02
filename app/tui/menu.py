@@ -5,6 +5,8 @@ from textual.containers import Vertical, Center
 from tui.autores import AutoresScreen
 from tui.livros import LivrosScreen
 from tui.exemplares import ExemplaresScreen
+from tui.usuarios import UsuariosScreen
+from tui.emprestimos import EmprestimosScreen
 from tui.base_view import BaseScreen
 
 
@@ -35,9 +37,11 @@ class MenuScreen(BaseScreen):
             Vertical(
                 Static("Sistema de Biblioteca Universitária", id="titulo"),
                 Vertical(
-                    Button("Gerenciar Autores", id="autores"),
-                    Button("Gerenciar Livros", id="livros"),
-                    Button("Gerenciar Exemplares", id="exemplares"),
+                    Button("Autores", id="autores"),
+                    Button("Livros", id="livros"),
+                    Button("Exemplares", id="exemplares"),
+                    Button("Usuários", id="usuarios"),
+                    Button("Empréstimos", id="emprestimos"),
                     Button("Sair", id="sair"),
                     id="menu",
                 ),
@@ -53,6 +57,10 @@ class MenuScreen(BaseScreen):
                 self.app.push_screen(LivrosScreen())
             case "exemplares":
                 self.app.push_screen(ExemplaresScreen())
+            case "usuarios":
+                self.app.push_screen(UsuariosScreen())
+            case "emprestimos":
+                self.app.push_screen(EmprestimosScreen())
             case "sair":
                 self.app.exit()
 
