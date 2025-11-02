@@ -1,8 +1,9 @@
 from sqlalchemy.orm import joinedload
-from core.logger import logger
+from sqlalchemy.exc import SQLAlchemyError
 from db.database import SessionLocal
 from db.models import Livro, Autor
-from sqlalchemy.exc import SQLAlchemyError
+from core.logger import logger
+
 
 class LivroService:
     """Serviço responsável pelas operações de CRUD de livros (com autores carregados)."""
@@ -14,18 +15,23 @@ class LivroService:
             with SessionLocal() as session:
                 livros = (
                     session.query(Livro)
-                    .options(joinedload(Livro.autores))  # ✅ evita DetachedInstanceError
+                    .options(joinedload(Livro.autores))
                     .order_by(Livro.titulo)
                     .all()
                 )
                 logger.info("Listagem de livros concluída com sucesso (%d registros).", len(livros))
                 return livros
         except SQLAlchemyError as e:
-            logger.error("Falha ao listar livros: %s", e)
+            logger.exception("Falha ao listar livros: %s", e)
             return []
 
     @staticmethod
     def cadastrar(isbn: str, titulo: str, editora: str, ano_publicacao: int, ids_autores: list[int] = None) -> str:
+        """Cadastra um novo livro com os autores vinculados."""
+        isbn = isbn.strip() if isbn else ""
+        titulo = titulo.strip() if titulo else ""
+        editora = editora.strip() if editora else ""
+
         if not isbn or not titulo or not editora or not ano_publicacao:
             logger.warning("Tentativa de cadastro com campos obrigatórios ausentes.")
             return "Todos os campos (ISBN, título, editora, ano) são obrigatórios."
@@ -38,9 +44,9 @@ class LivroService:
                     return f"Livro '{titulo}' já cadastrado."
 
                 novo_livro = Livro(
-                    isbn=isbn.strip(),
-                    titulo=titulo.strip(),
-                    editora=editora.strip(),
+                    isbn=isbn,
+                    titulo=titulo,
+                    editora=editora,
                     ano_publicacao=ano_publicacao,
                 )
 
@@ -50,6 +56,7 @@ class LivroService:
 
                 session.add(novo_livro)
                 session.commit()
+
                 logger.info("Livro '%s' (%s) cadastrado com sucesso.", titulo, isbn)
                 return f"Livro '{titulo}' cadastrado com sucesso."
         except SQLAlchemyError as e:
@@ -57,7 +64,14 @@ class LivroService:
             return "Erro ao cadastrar livro."
 
     @staticmethod
-    def editar(isbn: str, titulo: str = None, editora: str = None, ano_publicacao: int = None, ids_autores: list[int] = None) -> str:
+    def editar(
+        isbn: str,
+        titulo: str = None,
+        editora: str = None,
+        ano_publicacao: int = None,
+        ids_autores: list[int] = None
+    ) -> str:
+        """Edita os dados de um livro existente."""
         try:
             with SessionLocal() as session:
                 livro = session.get(Livro, isbn)
@@ -71,7 +85,6 @@ class LivroService:
                     livro.editora = editora.strip()
                 if ano_publicacao:
                     livro.ano_publicacao = ano_publicacao
-
                 if ids_autores is not None:
                     autores = session.query(Autor).filter(Autor.id.in_(ids_autores)).all()
                     livro.autores = autores
@@ -85,6 +98,7 @@ class LivroService:
 
     @staticmethod
     def excluir(isbn: str) -> str:
+        """Exclui um livro pelo ISBN."""
         try:
             with SessionLocal() as session:
                 livro = session.get(Livro, isbn)
@@ -95,6 +109,7 @@ class LivroService:
                 titulo = livro.titulo
                 session.delete(livro)
                 session.commit()
+
                 logger.info("Livro '%s' (ISBN %s) excluído com sucesso.", titulo, isbn)
                 return f"Livro '{titulo}' excluído com sucesso."
         except SQLAlchemyError as e:

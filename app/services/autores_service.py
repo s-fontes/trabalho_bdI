@@ -1,7 +1,7 @@
-from core.logger import logger
 from db.database import SessionLocal
 from db.models import Autor
 from sqlalchemy.exc import SQLAlchemyError
+from core.logger import logger
 
 
 class AutorService:
@@ -22,13 +22,13 @@ class AutorService:
     @staticmethod
     def cadastrar(nome: str) -> str:
         """Cadastra um novo autor, retornando uma mensagem de status."""
-        if not nome or not nome.strip():
+        nome = nome.strip() if nome else ""
+        if not nome:
             logger.warning("Tentativa de cadastro com nome vazio.")
             return "O nome do autor não pode estar vazio."
 
         try:
             with SessionLocal() as session:
-                nome = nome.strip()
                 existente = session.query(Autor).filter_by(nome=nome).first()
                 if existente:
                     logger.info("Autor '%s' já existe.", nome)
@@ -46,7 +46,8 @@ class AutorService:
     @staticmethod
     def editar(autor_id: int, novo_nome: str) -> str:
         """Edita o nome de um autor existente."""
-        if not novo_nome or not novo_nome.strip():
+        novo_nome = novo_nome.strip() if novo_nome else ""
+        if not novo_nome:
             logger.warning("Tentativa de edição com nome vazio.")
             return "O novo nome não pode estar vazio."
 
@@ -57,9 +58,12 @@ class AutorService:
                     logger.warning("Tentativa de edição de autor inexistente (ID %d).", autor_id)
                     return "Autor não encontrado."
 
-                novo_nome = novo_nome.strip()
-                existente = session.query(Autor).filter(Autor.nome == novo_nome, Autor.id != autor_id).first()
-                if existente:
+                nome_ja_usado = session.query(Autor).filter(
+                    Autor.nome == novo_nome,
+                    Autor.id != autor_id
+                ).first()
+
+                if nome_ja_usado:
                     logger.info("Tentativa de renomear para nome já existente: '%s'.", novo_nome)
                     return f"Já existe um autor com o nome '{novo_nome}'."
 

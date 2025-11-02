@@ -207,6 +207,12 @@ VALUES
         'helena.rocha@uerj.br',
         '88888888888',
         'aluno'
+    ),
+    (
+        'Rafael Souza',
+        'rafael.souza@uerj.br',
+        '00000000000',
+        'aluno'
     );
 
 INSERT INTO
@@ -242,7 +248,9 @@ VALUES
     ('9788532520754', 'EX0012', TRUE),
     ('9788532530807', 'EX0013', TRUE),
     ('9788522006352', 'EX0014', TRUE),
-    ('9788503012932', 'EX0015', TRUE);
+    ('9788503012932', 'EX0015', TRUE),
+    ('9788503012932', 'EX0016', TRUE),
+    ('9788503012932', 'EX0017', TRUE);
 
 INSERT INTO
     biblioteca.emprestimos (

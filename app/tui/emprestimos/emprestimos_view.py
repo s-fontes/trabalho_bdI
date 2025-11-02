@@ -80,7 +80,7 @@ class EmprestimosScreen(BaseScreen):
             data_devol = e.data_devolucao.strftime("%d/%m/%Y") if e.data_devolucao else "-"
 
             if e.data_devolucao:
-                situacao = "✅ Disponível"
+                situacao = "✅ Devolvido"
             elif e.data_prevista < hoje:
                 situacao = "🔴 Atrasado"
             else:

@@ -8,10 +8,8 @@ from tui.base_view import BaseForm
 
 
 class LivroCadastroDialog(BaseForm):
-    """Diálogo unificado para cadastro e edição de livros.
-
-    Exibe rótulos explícitos para cada campo e permite gerenciar autores.
-    Pode ser usado tanto para criar quanto para editar registros existentes.
+    """Formulário para cadastro e edição de livros.
+    Mantém consistência visual com os outros diálogos.
     """
 
     def __init__(self, on_submit, dados_existentes: dict | None = None):
@@ -20,6 +18,7 @@ class LivroCadastroDialog(BaseForm):
         self.dados = dados_existentes or {}
         self.autores_selecionados = set(self.dados.get("ids_autores", []))
         self.modo_edicao = bool(dados_existentes)
+        self.autores_texto = self._autores_texto()
 
     def compose(self) -> ComposeResult:
         yield Vertical(
@@ -28,7 +27,6 @@ class LivroCadastroDialog(BaseForm):
                 id="titulo_sub",
             ),
 
-            # Campos com rótulos explícitos
             Static("ISBN:", id="lbl_isbn"),
             Input(value=self.dados.get("isbn", ""), placeholder="Digite o ISBN", id="isbn"),
 
@@ -41,7 +39,11 @@ class LivroCadastroDialog(BaseForm):
             Static("Ano de Publicação:", id="lbl_ano"),
             Input(value=str(self.dados.get("ano", "")), placeholder="Ex: 2025", id="ano"),
 
-            Button("Selecionar Autores", id="selecionar_autores"),
+            Horizontal(
+                Button("Selecionar Autores", id="selecionar_autores"),
+                Static(self.autores_texto, id="lbl_autores"),
+            ),
+
             Horizontal(
                 Button("Cancelar", id="cancelar"),
                 Button("Salvar", id="salvar", variant="success"),
@@ -49,20 +51,22 @@ class LivroCadastroDialog(BaseForm):
             id="popup_content",
         )
 
-    # ---------------------------------------------------------------
-    # AÇÕES DE BOTÕES
-    # ---------------------------------------------------------------
-
-    @on(Button.Pressed, "#cancelar")
-    def cancelar(self):
-        self.app.pop_screen()
+    # ---------------------------------------------------------
+    # UTILITÁRIOS
+    # ---------------------------------------------------------
+    def _autores_texto(self) -> str:
+        if not self.autores_selecionados:
+            return "(Nenhum autor selecionado)"
+        return ", ".join(self.dados.get("autores_nomes", [])) or "(Autores selecionados)"
 
     @on(Button.Pressed, "#selecionar_autores")
     def abrir_selecao_autores(self):
         def receber_autores(autores):
             self.autores_selecionados = {a[0] for a in autores}
-            nomes = ", ".join(a[1] for a in autores)
-            self.app.notify(f"Autores selecionados: {nomes if nomes else '(nenhum)'}")
+            nomes = [a[1] for a in autores]
+            self.dados["autores_nomes"] = nomes
+            self.query_one("#lbl_autores", Static).update(self._autores_texto())
+            self.app.notify(f"Autores selecionados: {', '.join(nomes) if nomes else '(nenhum)'}")
 
         self.app.push_screen(
             AutoresSelectScreen(
@@ -96,4 +100,8 @@ class LivroCadastroDialog(BaseForm):
         )
 
         self.on_submit(self.dados)
+        self.app.pop_screen()
+
+    @on(Button.Pressed, "#cancelar")
+    def cancelar(self):
         self.app.pop_screen()
