@@ -11,8 +11,6 @@ from tui.base_view import BaseScreen
 
 
 class MenuScreen(BaseScreen):
-    """Tela principal de menu para navegar entre os módulos."""
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;
@@ -65,10 +63,10 @@ class MenuScreen(BaseScreen):
                 self.app.exit()
 
 
-class MenuApp(App):
+class Biblioteca(App):
     def on_mount(self):
         self.push_screen(MenuScreen())
 
 
 if __name__ == "__main__":
-    MenuApp().run()
+    Biblioteca().run()

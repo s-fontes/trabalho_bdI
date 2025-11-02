@@ -1,3 +1,4 @@
+from datetime import date
 from textual.widgets import Header, Footer, Button, Static, DataTable
 from textual.containers import Horizontal, Vertical
 from textual import on
@@ -53,7 +54,8 @@ class EmprestimosScreen(BaseScreen):
     def on_mount(self):
         tabela = self.query_one("#tabela_emprestimos", DataTable)
         tabela.add_columns(
-            "ID", "Usuário", "Exemplar", "Livro", "Data Empréstimo", "Prevista", "Devolução"
+            "ID", "Usuário", "Exemplar", "Livro",
+            "Data Empréstimo", "Prevista", "Devolução", "Situação"
         )
         tabela.cursor_type = "row"
         self.listar_emprestimos()
@@ -67,19 +69,31 @@ class EmprestimosScreen(BaseScreen):
     def listar_emprestimos(self):
         tabela = self.query_one("#tabela_emprestimos", DataTable)
         tabela.clear()
+        hoje = date.today()
+
         for e in EmprestimoService.listar():
             usuario = e.usuario.nome if e.usuario else "(Desconhecido)"
             exemplar = e.exemplar.codigo_exemplar if e.exemplar else "-"
             livro = e.exemplar.livro.titulo if e.exemplar and e.exemplar.livro else "-"
             data_emp = e.data_emprestimo.strftime("%d/%m/%Y")
             data_prev = e.data_prevista.strftime("%d/%m/%Y")
-            data_dev = e.data_devolucao.strftime("%d/%m/%Y") if e.data_devolucao else "-"
+            data_devol = e.data_devolucao.strftime("%d/%m/%Y") if e.data_devolucao else "-"
+
+            if e.data_devolucao:
+                situacao = "✅ Disponível"
+            elif e.data_prevista < hoje:
+                situacao = "🔴 Atrasado"
+            else:
+                situacao = "🔵 Emprestado"
+
             tabela.add_row(
-                str(e.id), usuario, exemplar, livro, data_emp, data_prev, data_dev
+                str(e.id), usuario, exemplar, livro, data_emp, data_prev, data_devol,situacao
             )
+
         if tabela.row_count:
             tabela.cursor_coordinate = (0, 0)
             tabela.focus()
+
         self._update_actions()
 
     @on(Button.Pressed, "#btn_emprestar")
