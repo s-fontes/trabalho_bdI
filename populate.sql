@@ -222,7 +222,8 @@ VALUES
     (2, 'Matemática'),
     (3, 'História'),
     (7, 'Letras'),
-    (8, 'Física');
+    (8, 'Física'),
+    (9, 'Administração');
 
 INSERT INTO
     biblioteca.professores (id, departamento)
