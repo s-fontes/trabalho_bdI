@@ -66,7 +66,3 @@ class MenuScreen(BaseScreen):
 class Biblioteca(App):
     def on_mount(self):
         self.push_screen(MenuScreen())
-
-
-if __name__ == "__main__":
-    Biblioteca().run()
