@@ -1,4 +1,4 @@
-# 📚 Sistema de Biblioteca Universitária
+# Sistema de Biblioteca Universitária
 
 Projeto da disciplina **Banco de Dados I (UERJ)**.
 O sistema permite controlar o empréstimo de livros de uma biblioteca universitária com:
@@ -12,14 +12,14 @@ O sistema permite controlar o empréstimo de livros de uma biblioteca universit�
 
 ---
 
-## 🎯 Objetivo
+## Objetivo
 
 Gerenciar empréstimos de livros físicos da biblioteca, permitindo que usuários (alunos ou professores) retirem exemplares disponíveis e os devolvam.
 Cada exemplar é único e não pode estar emprestado a mais de uma pessoa ao mesmo tempo.
 
 ---
 
-## 🧱 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 trabalho_bdI/
@@ -39,9 +39,9 @@ trabalho_bdI/
 
 ---
 
-## ⚙️ Como Executar
+## Como Executar
 
-### 1. Configure o `.env`
+###  Configure o `.env`
 
 Crie um arquivo `.env` com as variáveis de ambiente:
 
@@ -55,7 +55,7 @@ PG_PORT=5432
 
 ---
 
-### 2. Use os comandos Make
+###  Use os comandos Make
 
 Com o Docker instalado, você pode utilizar os seguintes comandos:
 
@@ -70,7 +70,7 @@ Com o Docker instalado, você pode utilizar os seguintes comandos:
 
 ---
 
-## ▶️ Executar a Interface TUI
+## Executar a Interface TUI
 
 ```bash
 make run
@@ -80,7 +80,7 @@ A interface textual será exibida, permitindo gerenciamento de empréstimos, usu
 
 ---
 
-## 🛠️ Dependências
+## Dependências
 
 - Python 3.11+
 - SQLAlchemy 2.x
