@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from sqlalchemy.orm import joinedload
 from db.database import SessionLocal
-from db.models import Emprestimo, Exemplar, Usuario, Aluno, Professor
+from db.models import Emprestimo, Exemplar, Usuario
 
 
 class EmprestimoService:
