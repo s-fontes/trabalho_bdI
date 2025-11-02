@@ -100,7 +100,6 @@ class LivrosScreen(BaseScreen):
         self.app.notify(msg)
         if "sucesso" in msg.lower():
             self.listar_livros()
-            self.app.pop_screen()  # volta para a tela de livros após salvar
 
     @on(Button.Pressed, "#btn_editar")
     def abrir_edicao(self):
@@ -136,7 +135,6 @@ class LivrosScreen(BaseScreen):
         self.app.notify(msg)
         if "sucesso" in msg.lower():
             self.listar_livros()
-            self.app.pop_screen()  # volta após editar
 
     @on(Button.Pressed, "#btn_excluir")
     def abrir_exclusao(self):

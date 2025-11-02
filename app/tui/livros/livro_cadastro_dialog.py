@@ -63,7 +63,6 @@ class LivroCadastroDialog(BaseForm):
             self.autores_selecionados = {a[0] for a in autores}
             nomes = ", ".join(a[1] for a in autores)
             self.app.notify(f"Autores selecionados: {nomes if nomes else '(nenhum)'}")
-            self.app.pop_screen()
 
         self.app.push_screen(
             AutoresSelectScreen(
