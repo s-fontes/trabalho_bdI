@@ -7,13 +7,6 @@ from services.livros_service import LivroService
 
 
 class LivroSelectScreen(BaseScreen):
-    """Tela de seleção de livro para associação a exemplares.
-
-    Callback `on_select` deve aceitar `(isbn: str, titulo: str)`.
-    Exemplo:
-        LivroSelectScreen(lambda isbn, titulo: ...)
-    """
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;

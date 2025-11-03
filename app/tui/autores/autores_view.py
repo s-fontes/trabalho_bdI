@@ -8,8 +8,6 @@ from services.autores_service import AutorService
 
 
 class AutoresScreen(BaseScreen):
-    """Tela CRUD de autores com layout consistente e estilo padronizado."""
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;
@@ -64,10 +62,6 @@ class AutoresScreen(BaseScreen):
         estado_vazio = tabela.row_count == 0
         btn_excluir.disabled = estado_vazio
         btn_editar.disabled = estado_vazio
-
-    # ---------------------------------------------------------
-    # OPERAÇÕES CRUD
-    # ---------------------------------------------------------
 
     def listar_autores(self):
         tabela = self.query_one("#tabela_autores", DataTable)

@@ -10,8 +10,6 @@ from services.emprestimos_service import EmprestimoService
 
 
 class EmprestimosScreen(BaseScreen):
-    """Tela de gerenciamento de empréstimos e devoluções."""
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;
@@ -98,11 +96,9 @@ class EmprestimosScreen(BaseScreen):
 
     @on(Button.Pressed, "#btn_emprestar")
     def abrir_cadastro(self):
-        """Abre o diálogo para registrar um novo empréstimo."""
         self.app.push_screen(EmprestimoCadastroDialog(self.emprestar))
 
     def emprestar(self, dados: dict):
-        """Cria um novo empréstimo e atualiza a tabela imediatamente."""
         msg = EmprestimoService.emprestar(
             dados["usuario_id"],
             dados["exemplar_id"],
@@ -113,7 +109,6 @@ class EmprestimosScreen(BaseScreen):
 
     @on(Button.Pressed, "#btn_devolver")
     def registrar_devolucao(self):
-        """Realiza a devolução do empréstimo selecionado."""
         tabela = self.query_one("#tabela_emprestimos", DataTable)
         if tabela.row_count == 0:
             self.app.notify("Nenhum empréstimo disponível.")

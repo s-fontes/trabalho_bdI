@@ -9,8 +9,6 @@ from tui.livros.livro_cadastro_dialog import LivroCadastroDialog
 
 
 class LivrosScreen(BaseScreen):
-    """Tela CRUD de livros, com estilo consistente e integração com o diálogo de cadastro/edição."""
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;
@@ -58,10 +56,6 @@ class LivrosScreen(BaseScreen):
         self.listar_livros()
         self._update_actions()
 
-    # ---------------------------------------------------------
-    # UTILITÁRIOS
-    # ---------------------------------------------------------
-
     def _update_actions(self):
         tabela = self.query_one("#tabela_livros", DataTable)
         btn_excluir = self.query_one("#btn_excluir", Button)
@@ -80,10 +74,6 @@ class LivrosScreen(BaseScreen):
             tabela.cursor_coordinate = (0, 0)
             tabela.focus()
         self._update_actions()
-
-    # ---------------------------------------------------------
-    # AÇÕES DE BOTÕES
-    # ---------------------------------------------------------
 
     @on(Button.Pressed, "#btn_cadastrar")
     def abrir_cadastro(self):

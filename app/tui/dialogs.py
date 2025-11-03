@@ -5,8 +5,6 @@ from textual.app import ComposeResult
 
 
 class BaseDialog(Screen):
-    """Base visual para caixas de diálogo reutilizáveis."""
-
     CSS = """
     Screen {
         align: center middle;
@@ -45,8 +43,6 @@ class BaseDialog(Screen):
 
 
 class ConfirmDialog(BaseDialog):
-    """Janela de confirmação genérica (exclusão, saída, etc)."""
-
     def __init__(self, mensagem: str, on_confirm):
         super().__init__()
         self.mensagem = mensagem
@@ -71,8 +67,6 @@ class ConfirmDialog(BaseDialog):
 
 
 class InputDialog(BaseDialog):
-    """Janela de entrada de texto simples."""
-
     def __init__(self, titulo: str, placeholder: str, on_submit):
         super().__init__()
         self.titulo = titulo
@@ -101,8 +95,6 @@ class InputDialog(BaseDialog):
 
 
 class EditDialog(BaseDialog):
-    """Janela de edição com valor inicial."""
-
     def __init__(self, item_id: int, valor_atual: str, on_submit):
         super().__init__()
         self.item_id = item_id

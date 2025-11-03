@@ -6,11 +6,8 @@ from core.logger import logger
 
 
 class UsuarioService:
-    """Serviço responsável por operações CRUD de usuários (alunos e professores)."""
-
     @staticmethod
     def listar():
-        """Retorna todos os usuários (alunos e professores), ordenados por nome."""
         try:
             with SessionLocal() as session:
                 usuarios = (
@@ -31,7 +28,6 @@ class UsuarioService:
 
     @staticmethod
     def cadastrar(nome: str, email: str, cpf: str, tipo: str, extra: str) -> str:
-        """Cadastra um novo aluno ou professor."""
         try:
             with SessionLocal() as session:
                 if session.query(Usuario).filter_by(cpf=cpf).first():
@@ -57,7 +53,6 @@ class UsuarioService:
 
     @staticmethod
     def editar(usuario_id: int, nome: str, email: str, tipo: str, extra: str) -> str:
-        """Edita os dados de um usuário (aluno ou professor)."""
         try:
             with SessionLocal() as session:
                 usuario = session.get(Usuario, usuario_id)
@@ -83,7 +78,6 @@ class UsuarioService:
 
     @staticmethod
     def excluir(usuario_id: int) -> str:
-        """Exclui um usuário pelo ID."""
         try:
             with SessionLocal() as session:
                 usuario = session.get(Usuario, usuario_id)

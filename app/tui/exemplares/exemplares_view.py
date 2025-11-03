@@ -9,8 +9,6 @@ from tui.exemplares.exemplar_cadastro_dialog import ExemplarCadastroDialog
 
 
 class ExemplaresScreen(BaseScreen):
-    """Tela CRUD de exemplares seguindo o padrão visual do sistema."""
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;
@@ -77,7 +75,6 @@ class ExemplaresScreen(BaseScreen):
             tabela.cursor_coordinate = (0, 0)
             tabela.focus()
         self._update_actions()
-
 
     @on(Button.Pressed, "#btn_cadastrar")
     def abrir_cadastro(self):

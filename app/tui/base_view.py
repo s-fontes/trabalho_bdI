@@ -4,8 +4,6 @@ from tui.dialogs import BaseDialog
 
 
 class BaseForm(BaseDialog):
-    """Estilo visual unificado para telas de formulário (cadastro e edição)."""
-
     CSS = BaseDialog.CSS + """
     Screen {
         align: center middle;
@@ -45,8 +43,6 @@ class BaseForm(BaseDialog):
 
 
 class BaseScreen(Screen):
-    """Classe base para todas as telas TUI com estilo consistente."""
-
     CSS = """
     Screen {
         align: center middle;
@@ -82,6 +78,5 @@ class BaseScreen(Screen):
     """
 
     def add_header_footer(self):
-        """Adiciona Header e Footer padrão à tela."""
         yield Header()
         yield Footer()

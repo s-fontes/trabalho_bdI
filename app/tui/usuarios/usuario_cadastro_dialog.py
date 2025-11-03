@@ -7,8 +7,6 @@ from tui.base_view import BaseForm
 
 
 class UsuarioCadastroDialog(BaseForm):
-    """Diálogo de cadastro e edição de usuários (alunos e professores)."""
-
     def __init__(self, on_submit, dados_existentes: dict | None = None):
         super().__init__()
         self.on_submit = on_submit
@@ -24,14 +22,12 @@ class UsuarioCadastroDialog(BaseForm):
             Input(value=self.dados.get("nome", ""), placeholder="Nome completo", id="nome"),
             Input(value=self.dados.get("email", ""), placeholder="E-mail", id="email"),
             Input(value=self.dados.get("cpf", ""), placeholder="CPF", id="cpf"),
-            # tipo (bloqueado se estiver editando)
             Select(
                 options=[("Aluno", "aluno"), ("Professor", "professor")],
                 value=self.tipo_atual,
                 id="tipo",
                 disabled=self.editando,
             ),
-            # campo dependente do tipo
             Input(
                 value=self.dados.get("extra", ""),
                 placeholder=self._placeholder_extra(self.tipo_atual),
@@ -44,16 +40,10 @@ class UsuarioCadastroDialog(BaseForm):
             id="popup_content",
         )
 
-    # ---------------------------------------------------------
-    # UTILITÁRIOS
-    # ---------------------------------------------------------
     def _placeholder_extra(self, tipo: str) -> str:
         """Retorna o placeholder apropriado conforme o tipo selecionado."""
         return "Curso do aluno" if tipo == "aluno" else "Departamento do professor"
 
-    # ---------------------------------------------------------
-    # EVENTOS
-    # ---------------------------------------------------------
     @on(Select.Changed, "#tipo")
     def ao_mudar_tipo(self, event: Select.Changed):
         """Atualiza o placeholder do campo extra ao trocar o tipo."""

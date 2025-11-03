@@ -8,13 +8,6 @@ from tui.livros.livro_select_view import LivroSelectScreen
 
 
 class ExemplarCadastroDialog(BaseForm):
-    """Formulário para cadastro e edição de exemplares.
-
-    - O livro é selecionado via `LivroSelectScreen`
-    - O campo `disponível` é sempre True (definido apenas por empréstimos)
-    - Segue o padrão visual de BaseForm para consistência
-    """
-
     def __init__(self, on_submit, dados_existentes: dict | None = None):
         super().__init__()
         self.on_submit = on_submit
@@ -52,9 +45,6 @@ class ExemplarCadastroDialog(BaseForm):
             id="popup_content",
         )
 
-    # ---------------------------------------------------------
-    # UTILITÁRIOS
-    # ---------------------------------------------------------
     def _descricao_livro(self) -> str:
         if not self.livro_isbn:
             return "(Nenhum livro selecionado)"
@@ -63,7 +53,6 @@ class ExemplarCadastroDialog(BaseForm):
 
     @on(Button.Pressed, "#selecionar_livro")
     def abrir_lista_livros(self):
-        """Abre a tela de seleção de livros."""
         def receber_livro(isbn, titulo):
             self.livro_isbn = isbn
             self.livro_titulo = titulo
@@ -74,7 +63,6 @@ class ExemplarCadastroDialog(BaseForm):
 
     @on(Button.Pressed, "#salvar")
     def salvar(self):
-        """Valida e envia os dados ao callback on_submit."""
         codigo_exemplar = self.query_one("#codigo_exemplar", Input).value.strip()
 
         if not self.livro_isbn:

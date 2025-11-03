@@ -9,8 +9,6 @@ from tui.usuarios.usuario_cadastro_dialog import UsuarioCadastroDialog
 
 
 class UsuariosScreen(BaseScreen):
-    """Tela CRUD de usuários (alunos e professores)."""
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;
@@ -51,19 +49,12 @@ class UsuariosScreen(BaseScreen):
         )
         yield Footer()
 
-    # ---------------------------------------------------------
-    # CICLO DE VIDA
-    # ---------------------------------------------------------
     def on_mount(self):
         tabela = self.query_one("#tabela_usuarios", DataTable)
         tabela.add_columns("ID", "Nome", "Email", "CPF", "Tipo", "Curso/Departamento")
         tabela.cursor_type = "row"
         self.listar_usuarios()
-        self._update_actions()
 
-    # ---------------------------------------------------------
-    # UTILITÁRIOS
-    # ---------------------------------------------------------
     def _update_actions(self):
         tabela = self.query_one("#tabela_usuarios", DataTable)
         estado_vazio = tabela.row_count == 0
@@ -85,9 +76,6 @@ class UsuariosScreen(BaseScreen):
 
         self._update_actions()
 
-    # ---------------------------------------------------------
-    # AÇÕES DE BOTÕES
-    # ---------------------------------------------------------
     @on(Button.Pressed, "#btn_cadastrar")
     def abrir_cadastro(self):
         self.app.push_screen(UsuarioCadastroDialog(self.cadastrar_usuario))
@@ -145,7 +133,7 @@ class UsuariosScreen(BaseScreen):
             dados["nome"],
             dados["email"],
             dados["tipo"],
-            dados["extra"],  # ✅ faltava esse parâmetro antes
+            dados["extra"],
         )
         self.app.notify(msg)
         if "sucesso" in msg.lower():

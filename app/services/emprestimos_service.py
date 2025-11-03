@@ -7,11 +7,8 @@ from core.logger import logger
 
 
 class EmprestimoService:
-    """Serviço de gerenciamento de empréstimos e devoluções."""
-
     @staticmethod
     def listar():
-        """Lista todos os empréstimos, com relações carregadas."""
         try:
             with SessionLocal() as db:
                 emprestimos = (
@@ -31,7 +28,6 @@ class EmprestimoService:
 
     @staticmethod
     def emprestar(usuario_id: int, exemplar_id: int, prazo_dias: int) -> str:
-        """Cria um novo empréstimo."""
         try:
             with SessionLocal() as db:
                 usuario = db.get(Usuario, usuario_id)
@@ -73,7 +69,6 @@ class EmprestimoService:
 
     @staticmethod
     def devolver(emprestimo_id: int) -> str:
-        """Realiza a devolução de um empréstimo ativo."""
         try:
             with SessionLocal() as db:
                 emprestimo = db.get(Emprestimo, emprestimo_id)

@@ -5,11 +5,8 @@ from core.logger import logger
 
 
 class AutorService:
-    """Serviço responsável pelas operações de CRUD de autores."""
-
     @staticmethod
     def listar():
-        """Retorna todos os autores cadastrados, ordenados por ID."""
         try:
             with SessionLocal() as session:
                 autores = session.query(Autor).order_by(Autor.id).all()
@@ -21,7 +18,6 @@ class AutorService:
 
     @staticmethod
     def cadastrar(nome: str) -> str:
-        """Cadastra um novo autor, retornando uma mensagem de status."""
         nome = nome.strip() if nome else ""
         if not nome:
             logger.warning("Tentativa de cadastro com nome vazio.")
@@ -45,7 +41,6 @@ class AutorService:
 
     @staticmethod
     def editar(autor_id: int, novo_nome: str) -> str:
-        """Edita o nome de um autor existente."""
         novo_nome = novo_nome.strip() if novo_nome else ""
         if not novo_nome:
             logger.warning("Tentativa de edição com nome vazio.")
@@ -77,7 +72,6 @@ class AutorService:
 
     @staticmethod
     def excluir(autor_id: int) -> str:
-        """Exclui um autor pelo ID, retornando uma mensagem de status."""
         try:
             with SessionLocal() as session:
                 autor = session.get(Autor, autor_id)

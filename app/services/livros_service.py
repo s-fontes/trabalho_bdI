@@ -6,11 +6,8 @@ from core.logger import logger
 
 
 class LivroService:
-    """Serviço responsável pelas operações de CRUD de livros (com autores carregados)."""
-
     @staticmethod
     def listar():
-        """Retorna todos os livros cadastrados, ordenados por título e com autores carregados."""
         try:
             with SessionLocal() as session:
                 livros = (
@@ -27,7 +24,6 @@ class LivroService:
 
     @staticmethod
     def cadastrar(isbn: str, titulo: str, editora: str, ano_publicacao: int, ids_autores: list[int] = None) -> str:
-        """Cadastra um novo livro com os autores vinculados."""
         isbn = isbn.strip() if isbn else ""
         titulo = titulo.strip() if titulo else ""
         editora = editora.strip() if editora else ""
@@ -71,7 +67,6 @@ class LivroService:
         ano_publicacao: int = None,
         ids_autores: list[int] = None
     ) -> str:
-        """Edita os dados de um livro existente."""
         try:
             with SessionLocal() as session:
                 livro = session.get(Livro, isbn)
@@ -98,7 +93,6 @@ class LivroService:
 
     @staticmethod
     def excluir(isbn: str) -> str:
-        """Exclui um livro pelo ISBN."""
         try:
             with SessionLocal() as session:
                 livro = session.get(Livro, isbn)

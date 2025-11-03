@@ -7,13 +7,6 @@ from services.autores_service import AutorService
 
 
 class AutoresSelectScreen(BaseScreen):
-    """Seleção múltipla simples de autores com alternância por clique.
-
-    - Exibe todos os autores cadastrados.
-    - Permite alternar seleção com clique (ou Enter).
-    - Retorna a lista de autores selecionados ao confirmar.
-    """
-
     CSS = BaseScreen.CSS + """
     #titulo {
         text-align: center;

@@ -8,10 +8,6 @@ from tui.base_view import BaseForm
 
 
 class LivroCadastroDialog(BaseForm):
-    """Formulário para cadastro e edição de livros.
-    Mantém consistência visual com os outros diálogos.
-    """
-
     def __init__(self, on_submit, dados_existentes: dict | None = None):
         super().__init__()
         self.on_submit = on_submit
@@ -51,9 +47,6 @@ class LivroCadastroDialog(BaseForm):
             id="popup_content",
         )
 
-    # ---------------------------------------------------------
-    # UTILITÁRIOS
-    # ---------------------------------------------------------
     def _autores_texto(self) -> str:
         if not self.autores_selecionados:
             return "(Nenhum autor selecionado)"

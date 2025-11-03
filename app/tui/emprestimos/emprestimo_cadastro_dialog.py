@@ -9,23 +9,18 @@ from services.exemplares_service import ExemplarService
 
 
 class EmprestimoCadastroDialog(BaseDialog):
-    """Diálogo para registrar um novo empréstimo."""
-
     def __init__(self, on_submit):
         super().__init__()
         self.titulo_texto = "Novo Empréstimo"
         self.on_submit = on_submit
 
     def compose(self) -> ComposeResult:
-        # opções de usuários e exemplares disponíveis
         usuarios_opts = [(u.nome, str(u.id)) for u in UsuarioService.listar()]
         exemplares_opts = [
             (f"{ex.codigo_exemplar} - {ex.livro.titulo}", str(ex.id))
             for ex in ExemplarService.listar()
             if ex.disponivel
         ]
-
-        # seletor de prazo (1 a 15 dias, padrão 7)
         prazos_opts = [(f"{d} dias", str(d)) for d in range(1, 16)]
 
         yield Vertical(
@@ -40,17 +35,12 @@ class EmprestimoCadastroDialog(BaseDialog):
             id="popup_content",
         )
 
-    # ---------------------------------------------------------
-    # AÇÕES DE BOTÕES
-    # ---------------------------------------------------------
     @on(Button.Pressed, "#cancelar")
     def cancelar(self):
-        """Fecha o diálogo sem salvar."""
         self.app.pop_screen()
 
     @on(Button.Pressed, "#salvar")
     def salvar(self):
-        """Valida os campos e envia os dados ao callback."""
         usuario_id = self.query_one("#usuario", Select).value
         exemplar_id = self.query_one("#exemplar", Select).value
         prazo_valor = self.query_one("#prazo", Select).value

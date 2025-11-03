@@ -6,11 +6,8 @@ from core.logger import logger
 
 
 class ExemplarService:
-    """Serviço de manipulação dos exemplares no banco de dados."""
-
     @staticmethod
     def listar():
-        """Retorna todos os exemplares com o livro associado já carregado."""
         try:
             with SessionLocal() as db:
                 exemplares = (
@@ -27,7 +24,6 @@ class ExemplarService:
 
     @staticmethod
     def cadastrar(livro_isbn: str, codigo_exemplar: str, disponivel: bool = True) -> str:
-        """Cadastra um novo exemplar vinculado a um livro existente."""
         codigo_exemplar = codigo_exemplar.strip() if codigo_exemplar else ""
 
         try:
@@ -66,7 +62,6 @@ class ExemplarService:
 
     @staticmethod
     def editar(exemplar_id: int, livro_isbn: str, codigo_exemplar: str, disponivel: bool = True) -> str:
-        """Edita um exemplar existente."""
         codigo_exemplar = codigo_exemplar.strip() if codigo_exemplar else ""
 
         try:
@@ -115,7 +110,6 @@ class ExemplarService:
 
     @staticmethod
     def excluir(exemplar_id: int) -> str:
-        """Exclui um exemplar existente."""
         try:
             with SessionLocal() as db:
                 exemplar = db.get(Exemplar, exemplar_id)
