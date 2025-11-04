@@ -1,8 +1,18 @@
+from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy import (
     Integer, String, ForeignKey, Date, Boolean, func, CheckConstraint
 )
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from db.database import Base
+
+
+tipo_usuario_enum = ENUM(
+    'aluno',
+    'professor',
+    name='tipo_usuario',
+    schema='biblioteca',
+    create_type=False
+)
 
 
 class Autor(Base):
@@ -67,7 +77,7 @@ class Usuario(Base):
     nome: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     cpf: Mapped[str] = mapped_column(String(14), unique=True, nullable=False)
-    tipo: Mapped[str] = mapped_column(String(20), nullable=False)
+    tipo: Mapped[str] = mapped_column(tipo_usuario_enum, nullable=False)
 
     emprestimos = relationship(
         "Emprestimo",

@@ -1,6 +1,21 @@
 CREATE SCHEMA IF NOT EXISTS biblioteca;
 
-CREATE TABLE IF NOT EXISTS biblioteca.autores (id SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_type t
+        JOIN pg_namespace n ON n.oid = t.typnamespace
+        WHERE t.typname = 'tipo_usuario' AND n.nspname = 'biblioteca'
+    ) THEN
+        CREATE TYPE biblioteca.tipo_usuario AS ENUM ('aluno', 'professor');
+    END IF;
+END
+$$;
+
+CREATE TABLE IF NOT EXISTS biblioteca.autores (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS biblioteca.livros (
     isbn VARCHAR(20) PRIMARY KEY,
@@ -22,7 +37,7 @@ CREATE TABLE IF NOT EXISTS biblioteca.usuarios (
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     cpf VARCHAR(14) UNIQUE NOT NULL,
-    tipo VARCHAR(20) NOT NULL
+    tipo biblioteca.tipo_usuario NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS biblioteca.alunos (
