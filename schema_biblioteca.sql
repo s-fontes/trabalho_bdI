@@ -1,38 +1,28 @@
-CREATE SCHEMA IF NOT EXISTS biblioteca;
+CREATE SCHEMA biblioteca;
+CREATE TYPE biblioteca.tipo_usuario AS ENUM ('aluno', 'professor');
 
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_type t
-        JOIN pg_namespace n ON n.oid = t.typnamespace
-        WHERE t.typname = 'tipo_usuario' AND n.nspname = 'biblioteca'
-    ) THEN
-        CREATE TYPE biblioteca.tipo_usuario AS ENUM ('aluno', 'professor');
-    END IF;
-END
-$$;
 
-CREATE TABLE IF NOT EXISTS biblioteca.autores (
+CREATE TABLE biblioteca.autores (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.livros (
+CREATE TABLE biblioteca.livros (
     isbn VARCHAR(20) PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
     editora VARCHAR(100) NOT NULL,
     ano_publicacao INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.livros_autores (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE biblioteca.livros_autores (
     livro_isbn VARCHAR(20) NOT NULL,
     autor_id INTEGER NOT NULL,
+    CONSTRAINT pk_livros_autores PRIMARY KEY (livro_isbn, autor_id),
     CONSTRAINT fk_livro FOREIGN KEY (livro_isbn) REFERENCES biblioteca.livros (isbn) ON DELETE CASCADE,
     CONSTRAINT fk_autor FOREIGN KEY (autor_id) REFERENCES biblioteca.autores (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.usuarios (
+CREATE TABLE biblioteca.usuarios (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -40,19 +30,19 @@ CREATE TABLE IF NOT EXISTS biblioteca.usuarios (
     tipo biblioteca.tipo_usuario NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.alunos (
+CREATE TABLE biblioteca.alunos (
     id INTEGER PRIMARY KEY,
     curso VARCHAR(100) NOT NULL,
     CONSTRAINT fk_aluno_usuario FOREIGN KEY (id) REFERENCES biblioteca.usuarios (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.professores (
+CREATE TABLE biblioteca.professores (
     id INTEGER PRIMARY KEY,
     departamento VARCHAR(100) NOT NULL,
     CONSTRAINT fk_professor_usuario FOREIGN KEY (id) REFERENCES biblioteca.usuarios (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.exemplares (
+CREATE TABLE biblioteca.exemplares (
     id SERIAL PRIMARY KEY,
     livro_isbn VARCHAR(20) NOT NULL,
     codigo_exemplar VARCHAR(20) UNIQUE NOT NULL,
@@ -60,7 +50,7 @@ CREATE TABLE IF NOT EXISTS biblioteca.exemplares (
     CONSTRAINT fk_exemplar_livro FOREIGN KEY (livro_isbn) REFERENCES biblioteca.livros (isbn) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS biblioteca.emprestimos (
+CREATE TABLE biblioteca.emprestimos (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER NOT NULL,
     exemplar_id INTEGER NOT NULL,
@@ -72,10 +62,10 @@ CREATE TABLE IF NOT EXISTS biblioteca.emprestimos (
     CONSTRAINT chk_data_prevista CHECK (data_prevista >= data_emprestimo)
 );
 
-CREATE INDEX IF NOT EXISTS idx_livros_titulo ON biblioteca.livros (titulo);
+CREATE INDEX idx_livros_titulo ON biblioteca.livros (titulo);
 
-CREATE INDEX IF NOT EXISTS idx_exemplares_disponivel ON biblioteca.exemplares (disponivel);
+CREATE INDEX idx_exemplares_disponivel ON biblioteca.exemplares (disponivel);
 
-CREATE INDEX IF NOT EXISTS idx_emprestimos_usuario ON biblioteca.emprestimos (usuario_id);
+CREATE INDEX idx_emprestimos_usuario ON biblioteca.emprestimos (usuario_id);
 
-CREATE INDEX IF NOT EXISTS idx_emprestimos_exemplar ON biblioteca.emprestimos (exemplar_id);
+CREATE INDEX idx_emprestimos_exemplar ON biblioteca.emprestimos (exemplar_id);

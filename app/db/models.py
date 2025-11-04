@@ -64,9 +64,8 @@ class LivroAutor(Base):
     __tablename__ = "livros_autores"
     __table_args__ = {"schema": "biblioteca"}
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    livro_isbn: Mapped[str] = mapped_column(ForeignKey("biblioteca.livros.isbn", ondelete="CASCADE"), nullable=False)
-    autor_id: Mapped[int] = mapped_column(ForeignKey("biblioteca.autores.id", ondelete="CASCADE"), nullable=False)
+    livro_isbn: Mapped[str] = mapped_column(ForeignKey("biblioteca.livros.isbn", ondelete="CASCADE"), primary_key=True, nullable=False)
+    autor_id: Mapped[int] = mapped_column(ForeignKey("biblioteca.autores.id", ondelete="CASCADE"), primary_key=True, nullable=False)
 
 
 class Usuario(Base):
