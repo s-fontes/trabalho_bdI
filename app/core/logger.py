@@ -5,7 +5,7 @@ def setup_logger(level=logging.INFO, log_dir="logs") -> logging.Logger:
     log_path = Path(log_dir)
     log_path.mkdir(parents=True, exist_ok=True)
 
-    logger = logging.getLogger()
+    logger = logging.getLogger("library_app")
     logger.setLevel(level)
 
     logging.getLogger("sqlalchemy").setLevel(logging.WARNING)
