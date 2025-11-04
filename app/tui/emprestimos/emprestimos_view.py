@@ -41,7 +41,7 @@ class EmprestimosScreen(BaseScreen):
             Static("Gerenciamento de Empréstimos", id="titulo"),
             Horizontal(
                 Button("Novo Empréstimo", id="btn_emprestar", variant="success"),
-                Button("Registrar Devolução", id="btn_devolver", variant="primary"),
+                Button("Devolução", id="btn_devolver", variant="primary"),
                 Button("Voltar", id="btn_voltar", variant="default"),
                 id="botoes",
             ),
@@ -120,7 +120,7 @@ class EmprestimosScreen(BaseScreen):
         emprestimo_id = int(row[0])
         self.app.push_screen(
             ConfirmDialog(
-                "Registrar devolução deste exemplar?",
+                f"Registrar devolução do exemplar '{row[2]}' do livro '{row[3]}' para o usuário '{row[1]}'?",
                 lambda: self.devolver_emprestimo(emprestimo_id),
             )
         )
