@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
 from sqlalchemy.exc import SQLAlchemyError
 from db.database import SessionLocal
@@ -17,7 +17,7 @@ class EmprestimoService:
                         joinedload(Emprestimo.usuario),
                         joinedload(Emprestimo.exemplar).joinedload(Exemplar.livro),
                     )
-                    .order_by(Emprestimo.data_emprestimo.desc())
+                    .order_by(Emprestimo.hora_emprestimo.desc())
                     .all()
                 )
                 logger.info("Listagem de empréstimos concluída (%d registros).", len(emprestimos))
@@ -43,13 +43,13 @@ class EmprestimoService:
                     logger.info("Exemplar '%s' já está emprestado.", exemplar.codigo_exemplar)
                     return f"O exemplar '{exemplar.codigo_exemplar}' já está emprestado."
 
-                hoje = date.today()
-                data_prevista = hoje + timedelta(days=prazo_dias)
+                hora_atual = datetime.now()
+                data_prevista = hora_atual.date() + timedelta(days=prazo_dias)
 
                 emprestimo = Emprestimo(
                     usuario_id=usuario_id,
                     exemplar_id=exemplar_id,
-                    data_emprestimo=hoje,
+                    hora_emprestimo=hora_atual,
                     data_prevista=data_prevista,
                 )
 
@@ -75,11 +75,11 @@ class EmprestimoService:
                 if not emprestimo:
                     logger.warning("Tentativa de devolução de empréstimo inexistente (ID %d).", emprestimo_id)
                     return "Empréstimo não encontrado."
-                if emprestimo.data_devolucao:
+                if emprestimo.hora_devolucao:
                     logger.info("Empréstimo (ID %d) já foi devolvido anteriormente.", emprestimo_id)
                     return "Este empréstimo já foi devolvido."
 
-                emprestimo.data_devolucao = date.today()
+                emprestimo.hora_devolucao = datetime.now()
 
                 exemplar = db.get(Exemplar, emprestimo.exemplar_id)
                 exemplar.disponivel = True

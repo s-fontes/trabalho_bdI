@@ -53,7 +53,7 @@ class EmprestimosScreen(BaseScreen):
         tabela = self.query_one("#tabela_emprestimos", DataTable)
         tabela.add_columns(
             "ID", "Usuário", "Exemplar", "Livro",
-            "Data Empréstimo", "Prevista", "Devolução", "Situação"
+            "Hora Empréstimo", "Data Prevista", "Hora Devolução", "Situação"
         )
         tabela.cursor_type = "row"
         self.listar_emprestimos()
@@ -73,11 +73,11 @@ class EmprestimosScreen(BaseScreen):
             usuario = e.usuario.nome if e.usuario else "(Desconhecido)"
             exemplar = e.exemplar.codigo_exemplar if e.exemplar else "-"
             livro = e.exemplar.livro.titulo if e.exemplar and e.exemplar.livro else "-"
-            data_emp = e.data_emprestimo.strftime("%d/%m/%Y")
+            hora_emp = e.hora_emprestimo.strftime("%d/%m/%Y %H:%M:%S")
             data_prev = e.data_prevista.strftime("%d/%m/%Y")
-            data_devol = e.data_devolucao.strftime("%d/%m/%Y") if e.data_devolucao else "-"
+            hora_devol = e.hora_devolucao.strftime("%d/%m/%Y %H:%M:%S") if e.hora_devolucao else "-"
 
-            if e.data_devolucao:
+            if e.hora_devolucao:
                 situacao = "✅ Devolvido"
             elif e.data_prevista < hoje:
                 situacao = "🔴 Atrasado"
@@ -85,7 +85,7 @@ class EmprestimosScreen(BaseScreen):
                 situacao = "🔵 Emprestado"
 
             tabela.add_row(
-                str(e.id), usuario, exemplar, livro, data_emp, data_prev, data_devol,situacao
+                str(e.id), usuario, exemplar, livro, hora_emp, data_prev, hora_devol, situacao
             )
 
         if tabela.row_count:

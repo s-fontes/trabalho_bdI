@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 CREATE SCHEMA biblioteca;
 CREATE TYPE biblioteca.tipo_usuario AS ENUM ('aluno', 'professor');
 
@@ -54,17 +56,18 @@ CREATE TABLE biblioteca.emprestimos (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER NOT NULL,
     exemplar_id INTEGER NOT NULL,
-    data_emprestimo DATE NOT NULL DEFAULT CURRENT_DATE,
+    hora_emprestimo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_prevista DATE NOT NULL,
-    data_devolucao DATE NULL,
+    hora_devolucao TIMESTAMP NULL,
     CONSTRAINT fk_emprestimo_usuario FOREIGN KEY (usuario_id) REFERENCES biblioteca.usuarios (id) ON DELETE CASCADE,
     CONSTRAINT fk_emprestimo_exemplar FOREIGN KEY (exemplar_id) REFERENCES biblioteca.exemplares (id) ON DELETE CASCADE,
-    CONSTRAINT chk_data_prevista CHECK (data_prevista >= data_emprestimo)
+    CONSTRAINT chk_data_prevista CHECK (data_prevista >= date(hora_emprestimo))
 );
 
-CREATE INDEX idx_livros_titulo ON biblioteca.livros (titulo);
+CREATE INDEX idx_livros_titulo ON biblioteca.livros USING gin (titulo gin_trgm_ops);
 
-CREATE INDEX idx_exemplares_disponivel ON biblioteca.exemplares (disponivel);
+CREATE INDEX idx_exemplares_disponivel ON biblioteca.exemplares (disponivel)
+WHERE disponivel = TRUE;
 
 CREATE INDEX idx_emprestimos_usuario ON biblioteca.emprestimos (usuario_id);
 

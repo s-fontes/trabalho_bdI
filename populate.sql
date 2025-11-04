@@ -257,113 +257,113 @@ INSERT INTO
     biblioteca.emprestimos (
         usuario_id,
         exemplar_id,
-        data_emprestimo,
+        hora_emprestimo,
         data_prevista,
-        data_devolucao
+        hora_devolucao
     )
 VALUES
     (
         1,
         1,
-        CURRENT_DATE - INTERVAL '12 days',
+        CURRENT_TIMESTAMP - INTERVAL '12 days',
         CURRENT_DATE - INTERVAL '5 days',
-        CURRENT_DATE - INTERVAL '3 days'
+        CURRENT_TIMESTAMP - INTERVAL '3 days'
     ),
     (
         2,
         2,
-        CURRENT_DATE - INTERVAL '10 days',
+        CURRENT_TIMESTAMP - INTERVAL '10 days',
         CURRENT_DATE - INTERVAL '3 days',
-        CURRENT_DATE - INTERVAL '1 days'
+        CURRENT_TIMESTAMP - INTERVAL '1 days'
     ),
     (
         3,
         3,
-        CURRENT_DATE - INTERVAL '5 days',
+        CURRENT_TIMESTAMP - INTERVAL '5 days',
         CURRENT_DATE + INTERVAL '2 days',
         NULL
     ),
     (
         4,
         4,
-        CURRENT_DATE - INTERVAL '8 days',
+        CURRENT_TIMESTAMP - INTERVAL '8 days',
         CURRENT_DATE + INTERVAL '7 days',
         NULL
     ),
     (
         5,
         5,
-        CURRENT_DATE - INTERVAL '15 days',
+        CURRENT_TIMESTAMP - INTERVAL '15 days',
         CURRENT_DATE - INTERVAL '1 days',
         NULL
     ),
     (
         6,
         6,
-        CURRENT_DATE - INTERVAL '4 days',
+        CURRENT_TIMESTAMP - INTERVAL '4 days',
         CURRENT_DATE + INTERVAL '10 days',
         NULL
     ),
     (
         7,
         7,
-        CURRENT_DATE - INTERVAL '3 days',
+        CURRENT_TIMESTAMP - INTERVAL '3 days',
         CURRENT_DATE + INTERVAL '4 days',
         NULL
     ),
     (
         8,
         8,
-        CURRENT_DATE - INTERVAL '2 days',
+        CURRENT_TIMESTAMP - INTERVAL '2 days',
         CURRENT_DATE + INTERVAL '5 days',
         NULL
     ),
     (
         1,
         9,
-        CURRENT_DATE - INTERVAL '1 days',
+        CURRENT_TIMESTAMP - INTERVAL '1 days',
         CURRENT_DATE + INTERVAL '6 days',
         NULL
     ),
     (
         2,
         10,
-        CURRENT_DATE - INTERVAL '7 days',
+        CURRENT_TIMESTAMP - INTERVAL '7 days',
         CURRENT_DATE + INTERVAL '8 days',
         NULL
     ),
     (
         3,
         11,
-        CURRENT_DATE - INTERVAL '6 days',
+        CURRENT_TIMESTAMP - INTERVAL '6 days',
         CURRENT_DATE + INTERVAL '9 days',
         NULL
     ),
     (
         4,
         12,
-        CURRENT_DATE - INTERVAL '5 days',
+        CURRENT_TIMESTAMP - INTERVAL '5 days',
         CURRENT_DATE + INTERVAL '10 days',
         NULL
     ),
     (
         5,
         13,
-        CURRENT_DATE - INTERVAL '9 days',
+        CURRENT_TIMESTAMP - INTERVAL '9 days',
         CURRENT_DATE - INTERVAL '2 days',
-        CURRENT_DATE - INTERVAL '1 days'
+        CURRENT_TIMESTAMP - INTERVAL '1 days'
     ),
     (
         6,
         14,
-        CURRENT_DATE - INTERVAL '14 days',
+        CURRENT_TIMESTAMP - INTERVAL '14 days',
         CURRENT_DATE - INTERVAL '4 days',
         NULL
     ),
     (
         7,
         15,
-        CURRENT_DATE - INTERVAL '2 days',
+        CURRENT_TIMESTAMP - INTERVAL '2 days',
         CURRENT_DATE + INTERVAL '10 days',
         NULL
     );
@@ -378,7 +378,7 @@ WHERE
         FROM
             biblioteca.emprestimos
         WHERE
-            data_devolucao IS NULL
+            hora_devolucao IS NULL
     );
 
 COMMIT;

@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy import (
-    Integer, String, ForeignKey, Date, Boolean, func, CheckConstraint
+    Integer, String, ForeignKey, Date, DateTime,Boolean, func, CheckConstraint
 )
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from db.database import Base
@@ -64,8 +64,8 @@ class LivroAutor(Base):
     __tablename__ = "livros_autores"
     __table_args__ = {"schema": "biblioteca"}
 
-    livro_isbn: Mapped[str] = mapped_column(ForeignKey("biblioteca.livros.isbn", ondelete="CASCADE"), primary_key=True, nullable=False)
-    autor_id: Mapped[int] = mapped_column(ForeignKey("biblioteca.autores.id", ondelete="CASCADE"), primary_key=True, nullable=False)
+    livro_isbn: Mapped[str] = mapped_column(ForeignKey("biblioteca.livros.isbn", ondelete="CASCADE"), primary_key=True)
+    autor_id: Mapped[int] = mapped_column(ForeignKey("biblioteca.autores.id", ondelete="CASCADE"), primary_key=True)
 
 
 class Usuario(Base):
@@ -148,7 +148,7 @@ class Exemplar(Base):
 class Emprestimo(Base):
     __tablename__ = "emprestimos"
     __table_args__ = (
-        CheckConstraint("data_prevista >= data_emprestimo", name="chk_data_prevista"),
+        CheckConstraint("data_prevista >= date(hora_emprestimo)", name="chk_data_prevista"),
         {"schema": "biblioteca"}
     )
 
@@ -163,9 +163,9 @@ class Emprestimo(Base):
         nullable=False
     )
 
-    data_emprestimo: Mapped[Date] = mapped_column(Date, nullable=False, server_default=func.current_date())
+    hora_emprestimo: Mapped[DateTime] = mapped_column(DateTime, nullable=False, server_default=func.current_timestamp())
     data_prevista: Mapped[Date] = mapped_column(Date, nullable=False)
-    data_devolucao: Mapped[Date] = mapped_column(Date, nullable=True)
+    hora_devolucao: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
 
     usuario = relationship("Usuario", back_populates="emprestimos")
     exemplar = relationship("Exemplar", back_populates="emprestimos")
