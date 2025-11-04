@@ -78,7 +78,7 @@ class AutoresSelectScreen(BaseScreen):
     @on(DataTable.RowSelected, "#tabela_autores")
     def alternar_por_click(self, event: DataTable.RowSelected):
         tabela = self.query_one("#tabela_autores", DataTable)
-        cursor_row = tabela.cursor_row  # Compatível com versões novas do Textual
+        cursor_row = tabela.cursor_row
         if cursor_row is None:
             return
 
